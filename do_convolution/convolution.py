@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from sensors import sentinel2, superdove
+#from sensors import sentinel2, superdove
 
 __all__ = ['convolution']
 
