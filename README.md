@@ -1,7 +1,7 @@
 # Satellite Sensors Convolutions
 This repository contains useful functions to convolve in-situ sprectral measurements to target satellite sensors.
 
-## Satellites currenlty available
+## Satellites currently available
 - Sentinel-2
 - Planet Superdove
 
