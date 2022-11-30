@@ -57,11 +57,11 @@ def convolution(reflectance_data, spectral_response_function, sensor_name,
 
     # checking what sensor to convolve bands for
     if sensor_name == 'Sentinel2':
-        convolved_data = sentinel2(spectral_response_function, band_muls,
-                                   s2_band_9_flag)
+        convolved_data = do_convolution.sentinel2(spectral_response_function,
+                                                  band_muls, s2_band_9_flag)
 
     if sensor_name == 'Superdove':
-        convolved_data = superdove(spectral_response_function, band_muls)
+        convolved_data = do_convolution.superdove(spectral_response_function, band_muls)
 
     # creating a single dataframe for all the input columns
     if len(convolved_data) <= 1:
