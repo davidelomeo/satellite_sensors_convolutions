@@ -3,7 +3,7 @@ reqs = ['numpy', 'pandas']
 
 setup(
     name = 'sensor_convolution',
-    packages = find_packages(include=['convolution', 'sensors']),
+    packages = find_packages(),
     install_requires = reqs,
     version = '0.1.0',
     description = '''Python package that allow to convolve input hyperspectral
