@@ -5,4 +5,4 @@ This repository contains useful functions to convolve in-situ sprectral measurem
 - Sentinel-2
 - Planet Superdove
 
-*More sensors will be addedd over time
+*More sensors will be addedd over time*
