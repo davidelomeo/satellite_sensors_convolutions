@@ -10,5 +10,5 @@ This repository contains useful functions to convolve in-situ sprectral measurem
 *More sensors will be addedd over time*
 
 ## Usage
-The function `convolution` expects a pandas dataframe as input, where the index needs to be a range of wavelength between 350 and 2500, and each site as a column of observations for each wavelenght.
-If your reflectance data does not inlcude such a range, plesae add rows of zeros for any missing wavelenght.
+The function `convolution` expects a pandas dataframe as input, where the index is a range of wavelengths between 350 and 2500, and each site is a column of observations for each wavelenght.
+If your reflectance data does not inlcude such range, plesae add rows of zeros for any missing wavelenght.
