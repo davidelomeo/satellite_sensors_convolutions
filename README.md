@@ -3,6 +3,7 @@ This repository contains useful functions to convolve in-situ sprectral measurem
 
 ## Satellites currently available
 - Sentinel-2
+- Sentinel-3
 - Planet Superdove
 
 **Note**: To use the package properly, please use the spectral response functions files inside the folder `spectral_response_functions`
