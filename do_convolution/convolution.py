@@ -1,12 +1,13 @@
 import numpy as np
 import pandas as pd
-from do_convolution.sensors import sentinel2, superdove
+from do_convolution.sensors import sentinel2, sentinel3, superdove
 
 __all__ = ['convolution']
 
 
-def convolution(reflectance_data, spectral_response_function, sensor_name,
-                water_bands_removed=False, s2_band_9_flag=False, savefile=None):
+def convolution(reflectance_data, spectral_response_function,
+                sensor_name, water_bands_removed=False,
+                s2_band_9_flag=False, savefile=None):
 
     '''Function that convolves the input hyperspectral bands to the input
     sensor bands
@@ -48,8 +49,8 @@ def convolution(reflectance_data, spectral_response_function, sensor_name,
     if water_bands_removed:
         np.seterr(divide="ignore")
 
-    # multiply each column in the input scetral measurements to the input
-    # sensor bands
+    # multiply each column in the input spectral measurements to the input
+    # spectral response functions
     band_muls = {}
     for column in reflectance_data:
         f = spectral_response_function.mul(reflectance_data[column], axis=0)
@@ -59,6 +60,9 @@ def convolution(reflectance_data, spectral_response_function, sensor_name,
     if sensor_name == 'Sentinel2':
         convolved_data = sentinel2(spectral_response_function,
                                    band_muls, s2_band_9_flag)
+
+    if sensor_name == 'Sentinel3':
+        convolved_data = sentinel3(spectral_response_function, band_muls)
 
     if sensor_name == 'Superdove':
         convolved_data = superdove(spectral_response_function, band_muls)
