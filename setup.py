@@ -2,11 +2,11 @@ from setuptools import find_packages, setup
 reqs = ['numpy', 'pandas']
 
 setup(
-    name = 'sensor_convolution',
+    name = 'convolution',
     packages = find_packages(),
     install_requires = reqs,
     version = '0.1.0',
-    description = '''Python package that allow to convolve input hyperspectral
+    description = '''Python package that to convolve input hyperspectral
                      bands to satellite sensor bands.''',
     author='Davide Lomeo',
     author_email='davide.lomeo@kcl.ac.uk',

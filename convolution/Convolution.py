@@ -22,7 +22,7 @@ class Convolution:
 
         sensor_name: str
            The name of the sensor for which to convolve the input reflectance data.
-           The choices of sensors are:
+           The available sensors are:
                - 'Sentinel2'
                - 'Sentinel3'
                - 'Superdove'
@@ -63,6 +63,7 @@ class Convolution:
 
         if self.sensor_name not in self._available_sensors:
             print('ERROR: Sensor name not available or valid')
+            print('To see a list of available sensors run help(Convolution)')
             self._sensor_flag = True
         else:
             # generating an empty dataframe with the band numbers and respective
@@ -134,7 +135,7 @@ class Convolution:
             also be saved to the target path if the variable savefile was provided.
         """
         if self._sensor_flag:
-            print('Nothing will be returned')
+            print('\nNothing will be returned')
             return None
         if not self._sensor_flag:
             if self.sensor_name == 'Sentinel2':
