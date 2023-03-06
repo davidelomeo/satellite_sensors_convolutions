@@ -1,4 +1,4 @@
-from .convolution import * # noqa
+from .Convolution import * # noqa
 from .sensors import *
 
 from pkg_resources import get_distribution, DistributionNotFound
