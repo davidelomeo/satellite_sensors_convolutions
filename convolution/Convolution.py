@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from pkg_resources import resource_filename
 from convolution.sensors import sentinel2, sentinel3, superdove, landsat5, landsat7, landsat8, landsat9
 
 __all__ = ['Convolution']
@@ -8,8 +9,7 @@ __all__ = ['Convolution']
 class Convolution:
     "Class to convolve input ground reflectance to target satelite bands"
 
-    def __init__(self, reflectance_data, spectral_response_function,
-                 sensor_name, savefile=None):
+    def __init__(self, reflectance_data, sensor_name, savefile=None):
         """ Function that constructs the Convolution datatype using the input parameters
 
         Parameters
@@ -22,76 +22,102 @@ class Convolution:
 
         sensor_name: str
            The name of the sensor for which to convolve the input reflectance data.
-           The available sensors are:
-               - 'Sentinel2'
-               - 'Sentinel3'
+           The choices of sensors are:
+               - 'Sentinel2a'
+               - 'Sentinel2b'
+               - 'Sentinel3a'
+               - 'Sentinel3b'
                - 'Superdove'
                - 'Landsat5TM'
                - 'Landsat7ETM+'
                - 'Landsat8OLI'
                - 'Landsat9OLI'
-        
+            NOTE: Sentinel3a-b, Landsat8OLI-9OLI return two dataframes in a list. The first one
+                  are the convolved bands means and the second one their standard deviations
+    
         savefile: str | Optional. Default: None
-            Path where to save the output dataframe containing the convolved bands when provided
+            Path where to save the output dataframe containing the convolved bands when provided.
+            NOTE: do not inlcude file name and extension, just target folder
         """
 
         # --- Public variables ---
         # These variables are defined by the user
         self.reflectance_data = reflectance_data
-        self.srf = spectral_response_function
         self.sensor_name = sensor_name
         self.savefile = savefile
+        
+        # Public variable not defined by the user but initiated by the user-defined sensor_name
+        self.srf, self.srf_stds = self.get_srf()
+        self.available_sensors = [
+            'Sentinel2a', 'Sentinel2b', 'Sentinel3a', 'Sentinel3b',
+            'Superdove', 'Landsat5TM', 'Landsat7ETM+', 'Landsat8OLI',
+            'Landsat9OLI'
+        ]
 
         # --- Private variables ---
         # These variables are not defined by the user but are needed to compute convolutions
-        self._band_muls = {}
-        self._available_sensors = [
-            'Sentinel2', 'Sentinel3', 'Superdove',
-            'Landsat5TM', 'Landsat7ETM+', 'Landsat8OLI',
-            'Landsat9OLI'
-        ]
+        self._band_muls, self._band_muls_stds = {}, {}
         self._sensor_flag = False
 
         # ensuring that numpy doesn't throw an error when dividing by 0
         np.seterr(divide="ignore")
+
+        # Checking if the input sensor name is valid and raising a flag
+        if self.sensor_name not in self.available_sensors:
+            print('ERROR: Sensor name not available or valid')
+            self._sensor_flag = True
+        else:
+            # generating two empty dataframes - one for band means and one for stds - with the
+            # band numbers and respective central wavelenghts as index
+            index_col = pd.Index(self.central_wavelenghts(),
+                         name='Band_name_and_centre_wavelength')
+            self.convolved_bands = pd.DataFrame(index=index_col)
+            self.convolved_bands_stds = pd.DataFrame(index=index_col)
 
         # multiply each column in the input spectral measurements to the input
         # spectral response functions
         for column in self.reflectance_data:
             product_df = self.srf.mul(self.reflectance_data[column], axis=0)
             self._band_muls[self.reflectance_data[column].name] = product_df
+            # doing the same as above only if the sensor used has both means and stds
+            if not self.srf_stds.empty:
+                product_df_std = self.srf_stds.mul(self.reflectance_data[column], axis=0)
+                self._band_muls_stds[self.reflectance_data[column].name] = product_df_std
 
-        if self.sensor_name not in self._available_sensors:
-            print('ERROR: Sensor name not available or valid')
-            print('To see a list of available sensors run help(Convolution)')
-            self._sensor_flag = True
-        else:
-            # generating an empty dataframe with the band numbers and respective
-            # central wavelenghts as index
-            index_col = pd.Index(self.__central_wavelenghts(),
-                         name='Band_name_and_centre_wavelength')
-            self.convolved_bands = pd.DataFrame(index=index_col)
-
-    def __central_wavelenghts(self):
-        """Private function that contains the name of the available satellite sensors,
+    def central_wavelenghts(self):
+        """Function that contains the name of the available satellite sensors,
            their bands, and the respective central wavelenghts
-           
+
         Returns
         -------
         list
             The function returns a list with the names of the bands and their respective central
-            wavelenghts for input sensor name
+            wavelenghts for the input sensor name
         """
 
         central_bands = {
 
-            'Sentinel2': [
+            'Sentinel2a': [
                 'Band1_443', 'Band2_490', 'Band3_560', 'Band4_665',
                 'Band5_705', 'Band6_740', 'Band7_783', 'Band8_842',
                 'Band8A_865', 'Band9_940', 'Band10_1375', 'Band11_1610',
                 'Band12_2190'
             ],
-            'Sentinel3': [
+            'Sentinel2b': [
+                'Band1_443', 'Band2_490', 'Band3_560', 'Band4_665',
+                'Band5_705', 'Band6_740', 'Band7_783', 'Band8_842',
+                'Band8A_865', 'Band9_940', 'Band10_1375', 'Band11_1610',
+                'Band12_2190'
+            ],
+            'Sentinel3a': [
+                'Band1_400', 'Band2_412.5', 'Band3_442.5', 'Band4_490',
+                'Band5_510', 'Band6_560', 'Band7_620', 'Band8_665', 
+                'Band9_673.75', 'Band10_681.25', 'Band11_708.75', 
+                'Band12_753.75', 'Band13_761.25', 'Band14_764.375', 
+                'Band15_767.5', 'Band16_778.75', 'Band17_865', 
+                'Band18_885', 'Band19_900', 'Band20_940', 'Band21_1020'
+            ],
+            'Sentinel3b': [
                 'Band1_400', 'Band2_412.5', 'Band3_442.5', 'Band4_490',
                 'Band5_510', 'Band6_560', 'Band7_620', 'Band8_665', 
                 'Band9_673.75', 'Band10_681.25', 'Band11_708.75', 
@@ -125,35 +151,111 @@ class Convolution:
 
         return central_bands[self.sensor_name]
 
+    def get_srf(self):
+        """Function that returns the spectral response function of the user-defined sensor
+
+        Returns
+        --------
+        pd.DataFrame()
+        The function returns a dataframe containing the band-wise spectral response function of
+        the user-defined sensor
+        """
+        # Using pkg_resources.resource_filename to access srf dataframes from the
+        # spectral_response_functions folder
+        if (self.sensor_name == 'Sentinel2a') | (self.sensor_name == 'Sentinel2b'):
+            path_to_file = resource_filename(
+                'convolution',
+                f'spectral_response_functions/s2{self.sensor_name[-1]}_srf.csv')
+            return pd.read_csv(path_to_file, index_col='SR_WL'), pd.DataFrame()
+
+        if (self.sensor_name == 'Sentinel3a') | (self.sensor_name == 'Sentinel3b'):
+            path_to_means = resource_filename(
+                'convolution',
+                f'spectral_response_functions/s3{self.sensor_name[-1]}_srf_means.csv')
+            path_to_stds = resource_filename(
+                'convolution',
+                f'spectral_response_functions/s3{self.sensor_name[-1]}_srf_stds.csv')
+            return pd.read_csv(
+                path_to_means, index_col='SR_WL'), pd.read_csv(path_to_stds, index_col='SR_WL')
+
+        if self.sensor_name == 'Superdove':
+            path_to_file = resource_filename(
+                'convolution', 'spectral_response_functions/superdove_srf.csv')
+            return pd.read_csv(path_to_file, index_col='SR_WL'), pd.DataFrame()
+
+        if self.sensor_name == 'Landsat5TM':
+            path_to_file = resource_filename(
+                'convolution', 'spectral_response_functions/l5_srf.csv')
+            return pd.read_csv(path_to_file, index_col='SR_WL'), pd.DataFrame()
+
+        if self.sensor_name == 'Landsat7ETM+':
+            path_to_file = resource_filename(
+                'convolution', 'spectral_response_functions/l7_srf.csv')
+            return pd.read_csv(path_to_file, index_col='SR_WL'), pd.DataFrame()
+
+        if (self.sensor_name == 'Landsat8OLI') | (self.sensor_name == 'Landsat9OLI'):
+            landsat_n = self.sensor_name.partition('OLI')[0][-1]
+            path_to_means = resource_filename(
+                'convolution',
+                f'spectral_response_functions/l{landsat_n}_srf_means.csv')
+            path_to_stds = resource_filename(
+                'convolution',
+                f'spectral_response_functions/l{landsat_n}_srf_stds.csv')
+            return pd.read_csv(
+                path_to_means, index_col='SR_WL'), pd.read_csv(path_to_stds, index_col='SR_WL')
+
     def do_convolutions(self):
-        """Function to initiate band convolution according to the sensor name def
+        """Function to initiate band convolution according to the sensor name defined by the user
 
         Returns
         -------
-        pd.DataFrame
-            The function returns a dataframe containing the vonvolved bands. The dataframe will
-            also be saved to the target path if the variable savefile was provided.
+        pd.DataFrame()
+            The function returns either one or two dataframes. The dataframe(s) will also be
+            saved to the target path if the variable savefile was provided. The function returns
+            two dataframes if the user convolves bands to Sentinel3a-b or Landsat8OLI-9OLI.
         """
         if self._sensor_flag:
-            print('\nNothing will be returned')
+            print('Nothing will be returned')
             return None
-        if not self._sensor_flag:
-            if self.sensor_name == 'Sentinel2':
+        else:
+            if (self.sensor_name == 'Sentinel2a') | (self.sensor_name == 'Sentinel2b'):
                 sentinel2(self)
-            if self.sensor_name == 'Sentinel3':
-                sentinel3(self)
+
+            if (self.sensor_name == 'Sentinel3a') | (self.sensor_name == 'Sentinel3b'):
+                self.convolved_bands = sentinel3(
+                    self, self.srf, self._band_muls, self.convolved_bands)
+                self.convolved_bands_stds = sentinel3(
+                    self, self.srf_stds, self._band_muls_stds, self.convolved_bands_stds)
+
             if self.sensor_name == 'Superdove':
                 superdove(self)
+
             if self.sensor_name == 'Landsat5TM':
                 landsat5(self)
+
             if self.sensor_name == 'Landsat7ETM+':
                 landsat7(self)
+
             if self.sensor_name == 'Landsat8OLI':
-                landsat8(self)
+                self.convolved_bands = landsat8(
+                    self, self.srf, self._band_muls, self.convolved_bands)
+                self.convolved_bands_stds = landsat8(
+                    self, self.srf_stds, self._band_muls_stds, self.convolved_bands_stds)
+
             if self.sensor_name == 'Landsat9OLI':
-                landsat9(self)
+                self.convolved_bands = landsat9(
+                    self, self.srf, self._band_muls, self.convolved_bands)
+                self.convolved_bands_stds = landsat9(
+                    self, self.srf_stds, self._band_muls_stds, self.convolved_bands_stds)
 
             if self.savefile:
-                self.convolved_bands.to_csv(self.savefile)
+                self.convolved_bands.to_csv(
+                    self.savefile + f'/{self.sensor_name}_convolved_bands.csv')
+                if not self.convolved_bands.empty:
+                    self.convolved_bands_stds.to_csv(
+                        self.savefile + f'/{self.sensor_name}_convolved_bands_stds.csv')
 
-            return self.convolved_bands
+            if not self.srf_stds.empty:
+                return self.convolved_bands, self.convolved_bands_stds
+            else:
+                return self.convolved_bands

@@ -49,55 +49,55 @@ def sentinel2(self):
 
         self.convolved_bands = pd.concat([self.convolved_bands, convolved_col], axis=1)
 
-def sentinel3(self):
+def sentinel3(self, srf, band_muls, convolved_bands):
     """Function that convolves input ground reflectance values to Sentinel3 bands"""
 
     # Bands central wavelengths details and Spectral response functions found at
     # https://sentinels.copernicus.eu/web/sentinel/technical-guides/sentinel-3-olci/olci-instrument/spectral-characterisation-data
 
-    for col_name, band_df in self._band_muls.items():
+    for col_name, band_df in band_muls.items():
         Band1 = (np.trapz((band_df.iloc[37:62, 0]), axis=0)) \
-            / (np.trapz((self.srf.iloc[37:62, 0]), axis=0))
+            / (np.trapz((srf.iloc[37:62, 0]), axis=0))
         Band2 = (np.trapz((band_df.iloc[52:72, 1]), axis=0)) \
-            / (np.trapz((self.srf.iloc[52:72, 1]), axis=0))
+            / (np.trapz((srf.iloc[52:72, 1]), axis=0))
         Band3 = (np.trapz((band_df.iloc[83:103, 2]), axis=0)) \
-            / (np.trapz((self.srf.iloc[83:103, 2]), axis=0))
+            / (np.trapz((srf.iloc[83:103, 2]), axis=0))
         Band4 = (np.trapz((band_df.iloc[131:150, 3]), axis=0)) \
-            / (np.trapz((self.srf.iloc[131:150, 3]), axis=0))
+            / (np.trapz((srf.iloc[131:150, 3]), axis=0))
         Band5 = (np.trapz((band_df.iloc[151:170, 4]), axis=0)) \
-            / (np.trapz((self.srf.iloc[151:170, 4]), axis=0))
+            / (np.trapz((srf.iloc[151:170, 4]), axis=0))
         Band6 = (np.trapz((band_df.iloc[201:220, 5]), axis=0)) \
-            / (np.trapz((self.srf.iloc[201:220, 5]), axis=0))
+            / (np.trapz((srf.iloc[201:220, 5]), axis=0))
         Band7 = (np.trapz((band_df.iloc[261:280, 6]), axis=0)) \
-            / (np.trapz((self.srf.iloc[261:280, 6]), axis=0))
+            / (np.trapz((srf.iloc[261:280, 6]), axis=0))
         Band8 = (np.trapz((band_df.iloc[305:325, 7]), axis=0)) \
-            / (np.trapz((self.srf.iloc[305:325, 7]), axis=0))
+            / (np.trapz((srf.iloc[305:325, 7]), axis=0))
         Band9 = (np.trapz((band_df.iloc[315:333, 8]), axis=0)) \
-            / (np.trapz((self.srf.iloc[315:333, 8]), axis=0))
+            / (np.trapz((srf.iloc[315:333, 8]), axis=0))
         Band10 = (np.trapz((band_df.iloc[323:340, 9]), axis=0)) \
-            / (np.trapz((self.srf.iloc[323:340, 9]), axis=0))
+            / (np.trapz((srf.iloc[323:340, 9]), axis=0))
         Band11 = (np.trapz((band_df.iloc[349:369, 10]), axis=0)) \
-            / (np.trapz((self.srf.iloc[349:369, 10]), axis=0))
+            / (np.trapz((srf.iloc[349:369, 10]), axis=0))
         Band12 = (np.trapz((band_df.iloc[396:413, 11]), axis=0)) \
-            / (np.trapz((self.srf.iloc[396:413, 11]), axis=0))
+            / (np.trapz((srf.iloc[396:413, 11]), axis=0))
         Band13 = (np.trapz((band_df.iloc[406:418, 12]), axis=0)) \
-            / (np.trapz((self.srf.iloc[406:418, 12]), axis=0))
+            / (np.trapz((srf.iloc[406:418, 12]), axis=0))
         Band14 = (np.trapz((band_df.iloc[408:422, 13]), axis=0)) \
-            / (np.trapz((self.srf.iloc[408:422, 13]), axis=0))
+            / (np.trapz((srf.iloc[408:422, 13]), axis=0))
         Band15 = (np.trapz((band_df.iloc[412:424, 14]), axis=0)) \
-            / (np.trapz((self.srf.iloc[412:424, 14]), axis=0))
+            / (np.trapz((srf.iloc[412:424, 14]), axis=0))
         Band16 = (np.trapz((band_df.iloc[417:442, 15]), axis=0)) \
-            / (np.trapz((self.srf.iloc[417:442, 15]), axis=0))
+            / (np.trapz((srf.iloc[417:442, 15]), axis=0))
         Band17 = (np.trapz((band_df.iloc[501:530, 16]), axis=0)) \
-            / (np.trapz((self.srf.iloc[501:530, 16]), axis=0))
+            / (np.trapz((srf.iloc[501:530, 16]), axis=0))
         Band18 = (np.trapz((band_df.iloc[524:544, 17]), axis=0)) \
-            / (np.trapz((self.srf.iloc[524:544, 17]), axis=0))
+            / (np.trapz((srf.iloc[524:544, 17]), axis=0))
         Band19 = (np.trapz((band_df.iloc[539:559, 18]), axis=0)) \
-            / (np.trapz((self.srf.iloc[539:559, 18]), axis=0))
+            / (np.trapz((srf.iloc[539:559, 18]), axis=0))
         Band20 = (np.trapz((band_df.iloc[575:604, 19]), axis=0)) \
-            / (np.trapz((self.srf.iloc[575:604, 19]), axis=0))
+            / (np.trapz((srf.iloc[575:604, 19]), axis=0))
         Band21 = (np.trapz((band_df.iloc[645:694, 20]), axis=0)) \
-            / (np.trapz((self.srf.iloc[645:694, 20]), axis=0))
+            / (np.trapz((srf.iloc[645:694, 20]), axis=0))
 
         convolved_col = pd.Series([Band1, Band2, Band3, Band4, Band5, Band6,
                                    Band7, Band8, Band9, Band10, Band11, Band12,
@@ -105,7 +105,8 @@ def sentinel3(self):
                                    Band19, Band20, Band21], index=self.convolved_bands.index,
                                   name = col_name+'_conv')
 
-        self.convolved_bands = pd.concat([self.convolved_bands, convolved_col], axis=1)
+        convolved_bands = pd.concat([convolved_bands, convolved_col], axis=1)
+    return convolved_bands
 
 def superdove(self):
     """Function that convolves input ground reflectance values to Superdove bands"""
@@ -206,7 +207,7 @@ def landsat7(self):
 
         self.convolved_bands = pd.concat([self.convolved_bands, convolved_col], axis=1)
 
-def landsat8(self):
+def landsat8(self, srf, band_muls, convolved_bands):
     """Function that convolves input ground reflectance values to Landsat8 bands"""
 
     # Landsat 8 spectral response functions found at:
@@ -215,34 +216,35 @@ def landsat8(self):
     # Details of central wavelengths taken from:
     # https://doi.org/10.3390/rs61212275
 
-    for col_name, band_df in self._band_muls.items():
+    for col_name, band_df in band_muls.items():
         Band1 = (np.trapz((band_df.iloc[77:110, 0]), axis=0))  \
-            / (np.trapz((self.srf.iloc[77:110, 0]), axis=0))
+            / (np.trapz((srf.iloc[77:110, 0]), axis=0))
         Band2 = (np.trapz((band_df.iloc[86:179, 1]), axis=0)) \
-            / (np.trapz((self.srf.iloc[86:179, 1]), axis=0))
+            / (np.trapz((srf.iloc[86:179, 1]), axis=0))
         Band3 = (np.trapz((band_df.iloc[162:261, 2]), axis=0)) \
-            / (np.trapz((self.srf.iloc[162:261, 2]), axis=0))
+            / (np.trapz((srf.iloc[162:261, 2]), axis=0))
         Band4 = (np.trapz((band_df.iloc[275:342, 3]), axis=0)) \
-            / (np.trapz((self.srf.iloc[275:342, 3]), axis=0))
+            / (np.trapz((srf.iloc[275:342, 3]), axis=0))
         Band5 = (np.trapz((band_df.iloc[479:551, 4]), axis=0)) \
-            / (np.trapz((self.srf.iloc[479:551, 4]), axis=0))
+            / (np.trapz((srf.iloc[479:551, 4]), axis=0))
         Band6 = (np.trapz((band_df.iloc[1165:1348, 5]), axis=0)) \
-            / (np.trapz((self.srf.iloc[1165:1348, 5]), axis=0))
+            / (np.trapz((srf.iloc[1165:1348, 5]), axis=0))
         Band7 = (np.trapz((band_df.iloc[1687:2006, 6]), axis=0)) \
-            / (np.trapz((self.srf.iloc[1687:2006, 6]), axis=0))
+            / (np.trapz((srf.iloc[1687:2006, 6]), axis=0))
         Band8 = (np.trapz((band_df.iloc[138:343, 7]), axis=0)) \
-            / (np.trapz((self.srf.iloc[138:343, 7]), axis=0))
+            / (np.trapz((srf.iloc[138:343, 7]), axis=0))
         Band9 = (np.trapz((band_df.iloc[990:1060, 8]), axis=0)) \
-            / (np.trapz((self.srf.iloc[990:1060, 8]), axis=0))
+            / (np.trapz((srf.iloc[990:1060, 8]), axis=0))
 
         convolved_col = pd.Series([Band1, Band2, Band3, Band4, Band5,
                                    Band6, Band7, Band8, Band9],
                                   index=self.convolved_bands.index,
                                   name = col_name+'_conv')
 
-        self.convolved_bands = pd.concat([self.convolved_bands, convolved_col], axis=1)
+        convolved_bands = pd.concat([convolved_bands, convolved_col], axis=1)
+    return convolved_bands
 
-def landsat9(self):
+def landsat9(self, srf, band_muls, convolved_bands):
     """Function that convolves input ground reflectance values to Landsat9 bands"""
 
     # Landsat 9 spectral response functions found at:
@@ -251,29 +253,30 @@ def landsat9(self):
     # Details of central wavelengths taken from:
     # https://doi.org/10.1117/12.2529776
 
-    for col_name, band_df in self._band_muls.items():
+    for col_name, band_df in band_muls.items():
         Band1 = (np.trapz((band_df.iloc[77:110, 0]), axis=0))  \
-            / (np.trapz((self.srf.iloc[77:110, 0]), axis=0))
+            / (np.trapz((srf.iloc[77:110, 0]), axis=0))
         Band2 = (np.trapz((band_df.iloc[86:181, 1]), axis=0)) \
-            / (np.trapz((self.srf.iloc[86:181, 1]), axis=0))
+            / (np.trapz((srf.iloc[86:181, 1]), axis=0))
         Band3 = (np.trapz((band_df.iloc[162:261, 2]), axis=0)) \
-            / (np.trapz((self.srf.iloc[162:261, 2]), axis=0))
+            / (np.trapz((srf.iloc[162:261, 2]), axis=0))
         Band4 = (np.trapz((band_df.iloc[275:342, 3]), axis=0)) \
-            / (np.trapz((self.srf.iloc[275:342, 3]), axis=0))
+            / (np.trapz((srf.iloc[275:342, 3]), axis=0))
         Band5 = (np.trapz((band_df.iloc[479:551, 4]), axis=0)) \
-            / (np.trapz((self.srf.iloc[479:551, 4]), axis=0))
+            / (np.trapz((srf.iloc[479:551, 4]), axis=0))
         Band6 = (np.trapz((band_df.iloc[1165:1348, 5]), axis=0)) \
-            / (np.trapz((self.srf.iloc[1165:1348, 5]), axis=0))
+            / (np.trapz((srf.iloc[1165:1348, 5]), axis=0))
         Band7 = (np.trapz((band_df.iloc[1687:2006, 6]), axis=0)) \
-            / (np.trapz((self.srf.iloc[1687:2006, 6]), axis=0))
+            / (np.trapz((srf.iloc[1687:2006, 6]), axis=0))
         Band8 = (np.trapz((band_df.iloc[138:343, 7]), axis=0)) \
-            / (np.trapz((self.srf.iloc[138:343, 7]), axis=0))
+            / (np.trapz((srf.iloc[138:343, 7]), axis=0))
         Band9 = (np.trapz((band_df.iloc[990:1060, 8]), axis=0)) \
-            / (np.trapz((self.srf.iloc[990:1060, 8]), axis=0))
+            / (np.trapz((srf.iloc[990:1060, 8]), axis=0))
 
         convolved_col = pd.Series([Band1, Band2, Band3, Band4, Band5,
                                    Band6, Band7, Band8, Band9],
                                   index=self.convolved_bands.index,
                                   name = col_name+'_conv')
 
-        self.convolved_bands = pd.concat([self.convolved_bands, convolved_col], axis=1)
+        convolved_bands = pd.concat([convolved_bands, convolved_col], axis=1)
+    return convolved_bands
