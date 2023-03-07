@@ -11,5 +11,6 @@ setup(
     author_email='davide.lomeo@kcl.ac.uk',
     # url='https://github.com/davidelomeo/satellite_sensors_convolutions,
     license='MIT',
-    package_data={'': ['spectral_response_functions/*.csv']}
+    package_data={'SRFs': ['spectral_response_functions/*.csv'],
+                  'CENTRAL_WAVELENGHTS': ['central_wavelengths.json']}
 )

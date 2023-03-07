@@ -1,0 +1,52 @@
+{
+     "Sentinel2a": [
+        "Band1_443", "Band2_490", "Band3_560", "Band4_665",
+        "Band5_705", "Band6_740", "Band7_783", "Band8_842",
+        "Band8A_865", "Band9_940", "Band10_1375", "Band11_1610",
+        "Band12_2190"
+    ],
+    "Sentinel2b": [
+        "Band1_443", "Band2_490", "Band3_560", "Band4_665",
+        "Band5_705", "Band6_740", "Band7_783", "Band8_842",
+        "Band8A_865", "Band9_940", "Band10_1375", "Band11_1610",
+        "Band12_2190"
+    ],
+    "Sentinel3a": [
+        "Band1_400", "Band2_412.5", "Band3_442.5", "Band4_490",
+        "Band5_510", "Band6_560", "Band7_620", "Band8_665", 
+        "Band9_673.75", "Band10_681.25", "Band11_708.75", 
+        "Band12_753.75", "Band13_761.25", "Band14_764.375", 
+        "Band15_767.5", "Band16_778.75", "Band17_865", 
+        "Band18_885", "Band19_900", "Band20_940", "Band21_1020"
+    ],
+    "Sentinel3b": [
+        "Band1_400", "Band2_412.5", "Band3_442.5", "Band4_490",
+        "Band5_510", "Band6_560", "Band7_620", "Band8_665", 
+        "Band9_673.75", "Band10_681.25", "Band11_708.75", 
+        "Band12_753.75", "Band13_761.25", "Band14_764.375", 
+        "Band15_767.5", "Band16_778.75", "Band17_865", 
+        "Band18_885", "Band19_900", "Band20_940", "Band21_1020"
+    ],
+    "Superdove": [
+        "Band1_443", "Band2_490", "Band3_531", "Band4_565",
+        "Band5_610", "Band6_665", "Band7_705", "Band8_865"
+    ],
+    "Landsat5TM": [
+        "Band1_485", "Band2_569", "Band3_660", "Band4_840",
+        "Band5_1676", "Band7_2223"
+    ],
+    "Landsat7ETM+": [
+        "Band1_483", "Band2_560", "Band3_662", "Band4_835",
+        "Band5_1648", "Band7_2206", "Band8_706"
+    ],
+    "Landsat8OLI": [
+        "Band1_443", "Band2_482", "Band3_561", "Band4_655",
+        "Band5_865", "Band6_1609", "Band7_2201", "Band8_590",
+        "Band9_1373"
+    ],
+    "Landsat9OLI": [
+        "Band1_443", "Band2_482", "Band3_562", "Band4_655",
+        "Band5_865", "Band6_1610", "Band7_2200", "Band8_590",
+        "Band9_1375"
+    ]
+}
