@@ -46,11 +46,11 @@ class Convolution:
         Functions
         ---------
         get_central_wavelengths()
-            Function to get the central band wavelengths for the input user-defined satellite name
-        get_files(records_path, file_prefix)
-            Loads the TFrecords and mixer using the input/ list and file prefix
-
-
+            Function to get the central band wavelengths of the user-defined sensor name
+        get_srf()
+            Function to get the spectral response function of the user-defined sensor name
+        do_convolutions(self):
+            Function to initiate band convolution according to the user-defined sensor name
         """
 
         # --- Public variables ---
@@ -97,80 +97,20 @@ class Convolution:
                 self._band_muls_stds[self.reflectance_data[column].name] = product_df_std
 
     def get_central_wavelengths(self):
-        """Function that returns the central bands wavelengths od the user-defined sensor"""
+        """Function that returns the central bands wavelengths od the user-defined sensor
+
+        Returns
+        --------
+        list
+        The function returns a list of band names and respective central wavelengths of the
+        the user-defined sensor name
+        """
 
         json_file = resource_filename(
             'convolution', 'spectral_response_functions/central_wavelengths.json')
         with open(json_file) as js:
             mixer = json.load(js)
         return mixer[self.sensor_name]
-
-    # def central_wavelenghts(self):
-    #     """Function that contains the name of the available satellite sensors,
-    #        their bands, and the respective central wavelenghts
-
-    #     Returns
-    #     -------
-    #     list
-    #         The function returns a list with the names of the bands and their respective central
-    #         wavelenghts for the input sensor name
-    #     """
-
-    #     central_bands = {
-
-    #         'Sentinel2a': [
-    #             'Band1_443', 'Band2_490', 'Band3_560', 'Band4_665',
-    #             'Band5_705', 'Band6_740', 'Band7_783', 'Band8_842',
-    #             'Band8A_865', 'Band9_940', 'Band10_1375', 'Band11_1610',
-    #             'Band12_2190'
-    #         ],
-    #         'Sentinel2b': [
-    #             'Band1_443', 'Band2_490', 'Band3_560', 'Band4_665',
-    #             'Band5_705', 'Band6_740', 'Band7_783', 'Band8_842',
-    #             'Band8A_865', 'Band9_940', 'Band10_1375', 'Band11_1610',
-    #             'Band12_2190'
-    #         ],
-    #         'Sentinel3a': [
-    #             'Band1_400', 'Band2_412.5', 'Band3_442.5', 'Band4_490',
-    #             'Band5_510', 'Band6_560', 'Band7_620', 'Band8_665', 
-    #             'Band9_673.75', 'Band10_681.25', 'Band11_708.75', 
-    #             'Band12_753.75', 'Band13_761.25', 'Band14_764.375', 
-    #             'Band15_767.5', 'Band16_778.75', 'Band17_865', 
-    #             'Band18_885', 'Band19_900', 'Band20_940', 'Band21_1020'
-    #         ],
-    #         'Sentinel3b': [
-    #             'Band1_400', 'Band2_412.5', 'Band3_442.5', 'Band4_490',
-    #             'Band5_510', 'Band6_560', 'Band7_620', 'Band8_665', 
-    #             'Band9_673.75', 'Band10_681.25', 'Band11_708.75', 
-    #             'Band12_753.75', 'Band13_761.25', 'Band14_764.375', 
-    #             'Band15_767.5', 'Band16_778.75', 'Band17_865', 
-    #             'Band18_885', 'Band19_900', 'Band20_940', 'Band21_1020'
-    #         ],
-    #         'Superdove': [
-    #             'Band1_443', 'Band2_490', 'Band3_531', 'Band4_565',
-    #             'Band5_610', 'Band6_665', 'Band7_705', 'Band8_865'
-    #         ],
-    #         'Landsat5TM': [
-    #             'Band1_485', 'Band2_569', 'Band3_660', 'Band4_840',
-    #             'Band5_1676', 'Band7_2223'
-    #         ],
-    #         'Landsat7ETM+': [
-    #             'Band1_483', 'Band2_560', 'Band3_662', 'Band4_835',
-    #             'Band5_1648', 'Band7_2206', 'Band8_706'
-    #         ],
-    #         'Landsat8OLI': [
-    #             'Band1_443', 'Band2_482', 'Band3_561', 'Band4_655',
-    #             'Band5_865', 'Band6_1609', 'Band7_2201', 'Band8_590',
-    #             'Band9_1373'
-    #         ],
-    #         'Landsat9OLI': [
-    #             'Band1_443', 'Band2_482', 'Band3_562', 'Band4_655',
-    #             'Band5_865', 'Band6_1610', 'Band7_2200', 'Band8_590',
-    #             'Band9_1375'
-    #         ]
-    #     }
-
-    #     return central_bands[self.sensor_name]
 
     def get_srf(self):
         """Function that returns the spectral response function of the user-defined sensor
