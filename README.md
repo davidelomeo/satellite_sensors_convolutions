@@ -45,3 +45,18 @@ convolved_bands = convolution_constructor.do_convolutions()
 print(convolved_bands[0], convolved_bands[1])
 ```
 **NOTE:** convolved_bands[0] will always return the means and convolved_bands[1] will always return the stds
+
+
+The user may also use the following method to return a list of bands names and relative central wavelengths according to the input sensor name:
+```
+convolution_constructor = convolution.Convolution(*input_data*, *sensor_name*)
+central_wavelengths = convolution_constructor.get_central_wavelengths()
+```
+
+The user may also use the following method to return a tuple containg the spectral response function for both mean and stds bands (the latter only available if the input sensor name is either ***Sentinel3a-b*** or ***Landsat8OLI-9OLI*** available):
+```
+convolution_constructor = convolution.Convolution(*input_data*, *sensor_name*)
+spectral_response_functions = convolution_constructor.get_srf()
+print(spectral_response_functions[0]) # returning the means srf -> available for all sensors
+print(spectral_response_functions[0]) # returning the stds srf -> on;y available for ***Sentinel3a-b*** and ***Landsat8OLI-9OLI***
+```
