@@ -98,7 +98,9 @@ class Convolution:
 
     def get_central_wavelengths(self):
         """Function that returns the central bands wavelengths od the user-defined sensor"""
-        json_file = resource_filename('convolution', 'central_wavelengths.json')
+
+        json_file = resource_filename(
+            'convolution', 'spectral_response_functions/central_wavelengths.json')
         with open(json_file) as js:
             mixer = json.load(js)
         return mixer[self.sensor_name]
