@@ -133,9 +133,9 @@ class Convolution:
 
         json_file = resource_filename(
             'convolution', 'spectral_response_functions/central_wavelengths.json')
-        with open(json_file) as js:
-            mixer = json.load(js)
-        return mixer[self.sensor_name]
+        with open(json_file) as file:
+            central_wavelengths = json.load(file)
+        return central_wavelengths[self.sensor_name]
 
     def get_srf(self):
         """Function that returns the spectral response function of the user-defined sensor
