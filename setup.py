@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name = 'convolution',
-    install_requires = ['numpy', 'pandas', 'pkg_resources'],
+    install_requires = ['numpy', 'pandas'],
     packages = find_packages(),
     version = '0.1.0',
     description = '''Python package that to convolve input hyperspectral
