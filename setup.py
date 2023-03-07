@@ -12,5 +12,5 @@ setup(
     # url='https://github.com/davidelomeo/satellite_sensors_convolutions,
     license='MIT',
     # include_package_data=True,
-    package_data={'': ['*.csv']},
+    package_data={'': ['spectral_response_functions/*.csv']},
 )
