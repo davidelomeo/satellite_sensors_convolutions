@@ -27,20 +27,20 @@ module will return two dafarames. The user can either assign the two dataframes 
 
 Example of usage if returning one dataframe (i.e., ***Sentinel2a-b***, ***Superdove***, ***Landsat5TM***, ***Landsat7ETM+***):
 ```
-convolution_constructor = convolution.Convolution(*args*, *qwargs*)
+convolution_constructor = convolution.Convolution(*input_data*, *sensor_name*)
 convolved_bands = convolution_constructor.do_convolutions()
 print(convolved_bands)
 ```
 
 Example of usage if returning two dataframes (i.e., ***Sentinel3a-b*** or ***Landsat8OLI-9OLI***):
 ```
-convolution_constructor = convolution.Convolution(*args*, *qwargs*)
+convolution_constructor = convolution.Convolution(*input_data*, *sensor_name*)
 convolved_bands_1, convolved_bands_2 = convolution_constructor.do_convolutions()
 print(convolved_bands_1, convolved_bands_2)
 ```
 or
 ```
-convolution_constructor = convolution.Convolution(*args*, *qwargs*)
+convolution_constructor = convolution.Convolution(*input_data*, *sensor_name*)
 convolved_bands = convolution_constructor.do_convolutions()
 print(convolved_bands[0], convolved_bands[1])
 ```
