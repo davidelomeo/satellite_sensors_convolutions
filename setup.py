@@ -13,8 +13,8 @@ setup(
     # url='https://github.com/davidelomeo/satellite_sensors_convolutions,
     license='MIT',
     # include_package_data=True,
-    package_data={'Landsat': ['spectral_response_functions/Landsat/*.csv'],
-                  'Planet': ['spectral_response_functions/Planet/*.csv'],
-                  'Sentinel2': ['spectral_response_functions/Sentinel2/*.csv'],
-                  'Sentinel3': ['spectral_response_functions/Sentinel3/*.csv']},
+    package_data={'': ['*.csv']}
+                #   'Planet': ['spectral_response_functions/Planet/*.csv'],
+                #   'Sentinel2': ['spectral_response_functions/Sentinel2/*.csv'],
+                #   'Sentinel3': ['spectral_response_functions/Sentinel3/*.csv']},
 )
