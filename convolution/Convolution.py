@@ -1,3 +1,16 @@
+"""Module to convolve input hyperspectral data to target satellite sensors bands"""
+
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# This script contains the class Convolution that allows to convolve input hyperspectral
+#  data to target satellite sensor bands
+#
+# Author: Davide Lomeo,
+# Email: davide.lomeo@kcl.ac.uk
+# GitHub: https://github.com/davidelomeo/satellite_sensors_convolutions
+# Date: 07 Mar 2023
+# Version: 0.1.0
 
 import json
 import numpy as np
@@ -96,6 +109,18 @@ class Convolution:
                 product_df_std = self.srf_stds.mul(self.reflectance_data[column], axis=0)
                 self._band_muls_stds[self.reflectance_data[column].name] = product_df_std
 
+        if self.savefile:
+            self._save_to_file()
+
+    def _save_to_file(self):
+        """Private function to save the produced convolution to the user-defined path"""
+
+        self.convolved_bands.to_csv(
+           self.savefile + f'/{self.sensor_name}_convolved_bands.csv')
+        if not self.srf_stds.empty:
+            self.convolved_bands_stds.to_csv(
+                self.savefile + f'/{self.sensor_name}_convolved_bands_stds.csv')
+
     def get_central_wavelengths(self):
         """Function that returns the central bands wavelengths od the user-defined sensor
 
@@ -103,7 +128,7 @@ class Convolution:
         --------
         list
         The function returns a list of band names and respective central wavelengths of the
-        the user-defined sensor name
+        user-defined sensor name
         """
 
         json_file = resource_filename(
@@ -121,49 +146,18 @@ class Convolution:
         The function returns a dataframe containing the band-wise spectral response function of
         the user-defined sensor
         """
-        # Using pkg_resources.resource_filename to access srf dataframes from the
-        # spectral_response_functions folder
-        if (self.sensor_name == 'Sentinel2a') | (self.sensor_name == 'Sentinel2b'):
-            path_to_file = resource_filename(
+        if self.sensor_name in ['Sentinel3a', 'Sentinel3b', 'Landsat8OLI', 'Landsat9OLI']:
+            path_to_srf_means = resource_filename(
+                'convolution', f'spectral_response_functions/{self.sensor_name}_srf_means.csv')
+            path_to_srf_stds = resource_filename(
+                'convolution', f'spectral_response_functions/{self.sensor_name}_srf_stds.csv')
+            return pd.read_csv(path_to_srf_means, index_col='SR_WL'
+                               ), pd.read_csv(path_to_srf_stds, index_col='SR_WL')
+        else:
+            path_to_srf = resource_filename(
                 'convolution',
-                f'spectral_response_functions/s2{self.sensor_name[-1]}_srf.csv')
-            return pd.read_csv(path_to_file, index_col='SR_WL'), pd.DataFrame()
-
-        if (self.sensor_name == 'Sentinel3a') | (self.sensor_name == 'Sentinel3b'):
-            path_to_means = resource_filename(
-                'convolution',
-                f'spectral_response_functions/s3{self.sensor_name[-1]}_srf_means.csv')
-            path_to_stds = resource_filename(
-                'convolution',
-                f'spectral_response_functions/s3{self.sensor_name[-1]}_srf_stds.csv')
-            return pd.read_csv(
-                path_to_means, index_col='SR_WL'), pd.read_csv(path_to_stds, index_col='SR_WL')
-
-        if self.sensor_name == 'Superdove':
-            path_to_file = resource_filename(
-                'convolution', 'spectral_response_functions/superdove_srf.csv')
-            return pd.read_csv(path_to_file, index_col='SR_WL'), pd.DataFrame()
-
-        if self.sensor_name == 'Landsat5TM':
-            path_to_file = resource_filename(
-                'convolution', 'spectral_response_functions/l5_srf.csv')
-            return pd.read_csv(path_to_file, index_col='SR_WL'), pd.DataFrame()
-
-        if self.sensor_name == 'Landsat7ETM+':
-            path_to_file = resource_filename(
-                'convolution', 'spectral_response_functions/l7_srf.csv')
-            return pd.read_csv(path_to_file, index_col='SR_WL'), pd.DataFrame()
-
-        if (self.sensor_name == 'Landsat8OLI') | (self.sensor_name == 'Landsat9OLI'):
-            landsat_n = self.sensor_name.partition('OLI')[0][-1]
-            path_to_means = resource_filename(
-                'convolution',
-                f'spectral_response_functions/l{landsat_n}_srf_means.csv')
-            path_to_stds = resource_filename(
-                'convolution',
-                f'spectral_response_functions/l{landsat_n}_srf_stds.csv')
-            return pd.read_csv(
-                path_to_means, index_col='SR_WL'), pd.read_csv(path_to_stds, index_col='SR_WL')
+                f'spectral_response_functions/{self.sensor_name}_srf.csv')
+            return pd.read_csv(path_to_srf, index_col='SR_WL'), pd.DataFrame()
 
     def do_convolutions(self):
         """Function to initiate band convolution according to the sensor name defined by the user
@@ -205,13 +199,6 @@ class Convolution:
                 self, self.srf, self._band_muls, self.convolved_bands)
             self.convolved_bands_stds = landsat9(
                 self, self.srf_stds, self._band_muls_stds, self.convolved_bands_stds)
-
-        if self.savefile:
-            self.convolved_bands.to_csv(
-                self.savefile + f'/{self.sensor_name}_convolved_bands.csv')
-            if not self.convolved_bands.empty:
-                self.convolved_bands_stds.to_csv(
-                    self.savefile + f'/{self.sensor_name}_convolved_bands_stds.csv')
 
         if not self.srf_stds.empty:
             return self.convolved_bands, self.convolved_bands_stds
