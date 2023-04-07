@@ -9,14 +9,14 @@
 # Author: Davide Lomeo,
 # Email: davide.lomeo@kcl.ac.uk
 # GitHub: https://github.com/davidelomeo/satellite_sensors_convolutions
-# Date: 07 Mar 2023
+# Date: 07 Apr 2023
 # Version: 0.1.0
 
 import json
 import numpy as np
 import pandas as pd
 from pkg_resources import resource_filename
-from convolution.sensors import sentinel2, sentinel3, superdove, landsat5, landsat7, landsat8, landsat9
+from convolution.sensors import sentinel2, sentinel3, superdove, landsat5, landsat7, landsat8, landsat9, meris
 
 __all__ = ['Convolution']
 
@@ -48,10 +48,11 @@ class Convolution:
                - 'Landsat7ETM+'
                - 'Landsat8OLI'
                - 'Landsat9OLI'
+               - 'MERIS'
 
-            NOTE: Sentinel3a-b, Landsat8OLI-9OLI return two dataframes in a list. The first one
-                  are the convolved bands means and the second one their standard deviations
-    
+            NOTE: Sentinel3a-b, Landsat8OLI-9OLI, MERIS return two dataframes in a list. The first
+                  one are the convolved bands means and the second one their standard deviations
+
         savefile: str | Optional. Default: None
             Path where to save the output dataframe containing the convolved bands when provided.
             NOTE: do not inlcude file name and extension, just target folder
@@ -78,7 +79,7 @@ class Convolution:
         self._available_sensors = [
             'Sentinel2a', 'Sentinel2b', 'Sentinel3a', 'Sentinel3b',
             'Superdove', 'Landsat5TM', 'Landsat7ETM+', 'Landsat8OLI',
-            'Landsat9OLI'
+            'Landsat9OLI', 'MERIS'
         ]
 
         # Raising a Value Error if the input sensor name doesn't match the names defined in the doc.
@@ -146,7 +147,7 @@ class Convolution:
         The function returns a dataframe containing the band-wise spectral response function of
         the user-defined sensor
         """
-        if self.sensor_name in ['Sentinel3a', 'Sentinel3b', 'Landsat8OLI', 'Landsat9OLI']:
+        if self.sensor_name in ['Sentinel3a', 'Sentinel3b', 'Landsat8OLI', 'Landsat9OLI', 'MERIS']:
             path_to_srf_means = resource_filename(
                 'convolution', f'spectral_response_functions/{self.sensor_name}_srf_means.csv')
             path_to_srf_stds = resource_filename(
@@ -167,7 +168,7 @@ class Convolution:
         pd.DataFrame()
             The function returns either one or two dataframes. The dataframe(s) will also be
             saved to the target path if the variable savefile was provided. The function returns
-            two dataframes if the user convolves bands to Sentinel3a-b or Landsat8OLI-9OLI.
+            two dataframes if the user convolves bands to Sentinel3a-b, Landsat8OLI-9OLI or MERIS.
         """
 
         if (self.sensor_name == 'Sentinel2a') | (self.sensor_name == 'Sentinel2b'):
@@ -198,6 +199,12 @@ class Convolution:
             self.convolved_bands = landsat9(
                 self, self.srf, self._band_muls, self.convolved_bands)
             self.convolved_bands_stds = landsat9(
+                self, self.srf_stds, self._band_muls_stds, self.convolved_bands_stds)
+
+        if (self.sensor_name == 'MERIS') | (self.sensor_name == 'MERIS'):
+            self.convolved_bands = meris(
+                self, self.srf, self._band_muls, self.convolved_bands)
+            self.convolved_bands_stds = meris(
                 self, self.srf_stds, self._band_muls_stds, self.convolved_bands_stds)
 
         if not self.srf_stds.empty:
