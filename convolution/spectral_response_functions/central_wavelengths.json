@@ -48,5 +48,12 @@
         "Band1_443", "Band2_482", "Band3_562", "Band4_655",
         "Band5_865", "Band6_1610", "Band7_2200", "Band8_590",
         "Band9_1375"
+    ],
+    "MERIS": [
+        "Band1_412", "Band2_442", "Band3_490", "Band4_510",
+        "Band5_560", "Band6_620", "Band7_665", "Band8_681",
+        "Band9_709", "Band10_754", "Band11_762", 
+        "Band12_779", "Band13_865", "Band14_885", 
+        "Band15_900"
     ]
 }
