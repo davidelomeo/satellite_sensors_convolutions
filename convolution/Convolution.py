@@ -88,6 +88,10 @@ class Convolution:
             Invalid Sensor Name! Please look at the documentation by running 'help(Convolution)'
             to see which sensors are available!''')
 
+        # ensuring that the input reflectance data indices are integers and columns are string
+        self.reflectance_data.index = self.reflectance_data.index.astype(int)
+        self.reflectance_data.columns = self.reflectance_data.columns.astype(str)
+
         # Public variable not defined by the user but initiated by the user-defined sensor_name
         self.srf, self.srf_stds = self.get_srf()
 
