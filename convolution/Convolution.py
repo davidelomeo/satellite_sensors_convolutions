@@ -92,6 +92,10 @@ class Convolution:
         self.reflectance_data.index = self.reflectance_data.index.astype(int)
         self.reflectance_data.columns = self.reflectance_data.columns.astype(str)
 
+        # ensuring that the input data macthes the required spectral range (350-2500), adding rows
+        # of zeros if the requirement is not met
+        self._check_reflectance_df_size()
+
         # Public variable not defined by the user but initiated by the user-defined sensor_name
         self.srf, self.srf_stds = self.get_srf()
 
@@ -125,6 +129,22 @@ class Convolution:
         if not self.srf_stds.empty:
             self.convolved_bands_stds.to_csv(
                 self.savefile + f'/{self.sensor_name}_convolved_bands_stds.csv')
+
+    def _check_reflectance_df_size(self):
+        """Private function to check if the input dataframe meets the length requirements"""
+
+        start_index = self.reflectance_data.index[0]
+        end_index = self.reflectance_data.index[-1]
+        if start_index > 350:
+            missing_rows_n = start_index - 350
+            top_zeros = pd.DataFrame(0, index=np.arange(missing_rows_n), columns=self.reflectance_data.columns)
+            top_zeros.index = [350 + i for i in range(missing_rows_n)]
+            self.reflectance_data = pd.concat([top_zeros, self.reflectance_data], axis=0)
+        if end_index < 2500:
+            missing_rows_n = 2500 - end_index
+            bottom_zeros = pd.DataFrame(0, index=np.arange(missing_rows_n), columns=self.reflectance_data.columns)
+            bottom_zeros.index = [end_index + i+1 for i in range(missing_rows_n)]
+            self.reflectance_data = pd.concat([self.reflectance_data, bottom_zeros], axis=0)
 
     def get_central_wavelengths(self):
         """Function that returns the central bands wavelengths od the user-defined sensor
