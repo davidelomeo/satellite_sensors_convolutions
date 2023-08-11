@@ -94,7 +94,7 @@ class Convolution:
 
         # ensuring that the input data macthes the required spectral range (350-2500), adding rows
         # of zeros if the requirement is not met
-        self._check_reflectance_df_size()
+        self.reflectance_data = self._check_reflectance_df_size()
 
         # Public variable not defined by the user but initiated by the user-defined sensor_name
         self.srf, self.srf_stds = self.get_srf()
@@ -145,6 +145,7 @@ class Convolution:
             bottom_zeros = pd.DataFrame(0, index=np.arange(missing_rows_n), columns=self.reflectance_data.columns)
             bottom_zeros.index = [end_index + i+1 for i in range(missing_rows_n)]
             self.reflectance_data = pd.concat([self.reflectance_data, bottom_zeros], axis=0)
+        return self.reflectance_data
 
     def get_central_wavelengths(self):
         """Function that returns the central bands wavelengths od the user-defined sensor
