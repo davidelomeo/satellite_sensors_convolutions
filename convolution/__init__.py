@@ -1,5 +1,5 @@
 from .Convolution import * # noqa
-from .sensors import *
+from .apply_convolutions import *
 
 from pkg_resources import get_distribution, DistributionNotFound
 try:
