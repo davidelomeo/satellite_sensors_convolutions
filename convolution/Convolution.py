@@ -116,9 +116,9 @@ class Convolution:
         the user-defined sensor
         """
 
-        path_to_srf = os.path.join(
+        path_to_srf = resource_filename(
             'convolution', f'SRFs_and_bandpasses/{self.sensor_name}_SRF.csv')
-        path_to_bandpass = os.path.join(
+        path_to_bandpass = resource_filename(
             'convolution', f'SRFs_and_bandpasses/{self.sensor_name}_bandpass.csv')
 
         return pd.read_csv(path_to_srf, index_col='wl'), pd.read_csv(path_to_bandpass)
