@@ -42,3 +42,5 @@ srf, bandpass = convolution_constructor.get_srf_and_bandpass()
 print(srf)
 print(bandpass)
 ```
+
+#### NOTE: Spectral Response Functions were donwloaded from here: https://oceancolor.gsfc.nasa.gov/resources/docs/rsr_tables/ 

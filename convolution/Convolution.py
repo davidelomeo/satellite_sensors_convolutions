@@ -9,7 +9,7 @@
 # Author: Davide Lomeo,
 # Email: davide.lomeo@kcl.ac.uk
 # GitHub: https://github.com/davidelomeo/satellite_sensors_convolutions
-# Date: 30 Jul 2024
+# Date: 20 Nov 2024
 # Version: 0.2.0
 
 import json
@@ -25,43 +25,45 @@ class Convolution:
     "Class to convolve input ground reflectance to target satelite bands"
 
     def __init__(self, in_situ_rrs, sensor_name, savefile=None):
-        """ Function that constructs the Convolution datatype using the input parameters
+        """
+        Function that constructs the Convolution datatype using the input parameters.
 
         Parameters
         ----------
-        reflectance_data: pd.DataFrame
-           The input dataframe that contains ground reflectance data
-    
-        spectral_response_function: pd.DataFrame
-           The input spectral response function
+        in_situ_rrs : pd.DataFrame
+            The input dataframe containing ground reflectance data.
+        
+        sensor_name : str
+            The name of the sensor for which to convolve the input reflectance data.
+            Available sensors include:
+            - 'TM_L5'           # Landsat 5 Thematic Mapper
+            - 'ETM+_L7'         # Landsat 7 Enhanced Thematic Mapper +
+            - 'OLI_L8'          # Landsat 8 Operational Land Imager
+            - 'OLI_L9'          # Landsat 9 Operational Land Imager
+            - 'MERIS'           # Medium Resolution Imaging Spectrometer
+            - 'MSI_S2A'         # Sentinel 2A MultiSpectral Instrument
+            - 'MSI_S2B'         # Sentinel 2B MultiSpectral Instrument
+            - 'OLCI_S3A'        # Sentinel 3A Ocean and Land Colour Instrument
+            - 'OLCI_S3B'        # Sentinel 3B Ocean and Land Colour Instrument
+            - 'MODIS_AQUA'      # Moderate Resolution Imaging Spectroradiometer on Aqua
+            - 'MODIS_TERRA'     # Moderate Resolution Imaging Spectroradiometer on Terra
+            - 'Superdove'       # Superdove satellite
+            - 'VIIRS_SNPP'      # Visible Infrared Imaging Radiometer Suite on Suomi NPP
+            - 'VIIRS_NOAA20'    # Visible Infrared Imaging Radiometer Suite on NOAA 20
+            - 'VIIRS_NOAA21'    # Visible Infrared Imaging Radiometer Suite on NOAA 21
+            - 'GOCI'            # Geostationary Ocean Color Imager
 
-        sensor_name: str
-           The name of the sensor for which to convolve the input reflectance data.
-
-           The choices of sensors are:
-               - 'TM_L5',
-               - 'ETM+_L7',
-               - 'OLI_L8',
-               - 'OLI_L9',
-               - 'MERIS',
-               - 'MSI_S2A',
-               - 'MSI_S2B',
-               - 'OLCI_S3A',
-               - 'OLCI_S3B',
-               - 'MODIS_AQUA',
-               - 'MODIS_TERRA'
-               - 'Superdove',
-
-        savefile: str | Optional. Default: None
-            Path where to save the output dataframe containing the convolved bands when provided.
-            NOTE: do not inlcude file name and extension, just target folder
+        savefile : str, optional
+            Path to save the output dataframe containing the convolved bands, if provided.
+            NOTE: Do not include the file name and extension, just the target folder.
 
         Functions
         ---------
         get_srf_and_bandpass()
-            Function to get the spectral response function and the bandpass information of the user-defined sensor name
-        do_convolutions(self):
-            Function to initiate band convolution according to the user-defined sensor name
+            Function to get the spectral response function and the bandpass information of the user-defined sensor.
+        
+        do_convolutions()
+            Function to initiate band convolution according to the user-defined sensor name.
         """
 
         # --- Public variables ---
@@ -75,7 +77,8 @@ class Convolution:
         self._available_sensors = [
             'MSI_S2A', 'MSI_S2B', 'OLCI_S3A', 'OLCI_S3B',
             'Superdove', 'TM_L5', 'ETM+_L7', 'OLI_L8',
-            'OLI_L9', 'MERIS', 'MODIS_AQUA', 'MODIS_TERRA'
+            'OLI_L9', 'MERIS', 'MODIS_AQUA', 'MODIS_TERRA',
+            'VIIRS_SNPP', 'VIIRS_NOAA20', 'VIIRS_NOAA21', 'GOCI'
         ]
 
         # Raising a Value Error if the input sensor name doesn't match the names defined in the doc.
@@ -124,14 +127,13 @@ class Convolution:
         return pd.read_csv(path_to_srf, index_col='wl'), pd.read_csv(path_to_bandpass)
 
     def do_convolutions(self):
-        """Function to initiate band convolution according to the sensor name defined by the user
+        """Function to perform band convolution based on the user-defined sensor name.
 
         Returns
         -------
-        pd.DataFrame()
-            The function returns either one or two dataframes. The dataframe(s) will also be
-            saved to the target path if the variable savefile was provided. The function returns
-            two dataframes if the user convolves bands to Sentinel3a-b, Landsat8OLI-9OLI or MERIS.
+        pd.DataFrame
+            The function returns a dataframe containing the convolved bands. If the 'savefile' 
+            parameter was provided, the dataframe will also be saved to the specified path.
         """
 
         self.warnings = []

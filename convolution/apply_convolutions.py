@@ -11,13 +11,18 @@ def convolve_bands_01nm(self, center_wl, width, in_situ_wl, in_situ_rrs):
     Convolve in situ reflectance values to a specific sensor band at 0.1nm intervals.
 
     Parameters:
-    - center_wl: float, center wavelength of the band
-    - width: float, width (FWHM) of the band
-    - in_situ_wl: array-like, in situ wavelengths (1nm intervals)
-    - in_situ_rrs: array-like, in situ reflectance values
+    - center_wl: float
+        Center wavelength of the band.
+    - width: float
+        Full width at half maximum (FWHM) of the band.
+    - in_situ_wl: array-like
+        In situ wavelengths (0.1nm intervals).
+    - in_situ_rrs: array-like
+        In situ reflectance values.
 
     Returns:
-    - convolved_value: float, convolved reflectance value for the band
+    - convolved_value: float
+        Convolved reflectance value for the band.
     """
 
     # Calculate exact half-widths and adjust for decimal precision
@@ -64,17 +69,21 @@ def convolve_bands_01nm(self, center_wl, width, in_situ_wl, in_situ_rrs):
 
 def convolve_bands_1nm(self, center_wl, width, in_situ_wl, in_situ_rrs):
     """
-    Convolve in situ reflectance values to a specific sensor band.
+    Convolve in situ reflectance values to a specific sensor band at 1nm intervals.
 
     Parameters:
-    - center_wl: float, center wavelength of the band
-    - width: float, width (FWHM) of the band
-    - in_situ_wl: array-like, in situ wavelengths (1nm intervals)
-    - in_situ_rrs: array-like, in situ reflectance values
-    - self.srf: DataFrame, sensor spectral response function with wavelengths as index and bands as columns
+    - center_wl: float
+        Center wavelength of the band.
+    - width: float
+        Full width at half maximum (FWHM) of the band.
+    - in_situ_wl: array-like
+        In situ wavelengths (1nm intervals).
+    - in_situ_rrs: array-like
+        In situ reflectance values.
 
     Returns:
-    - convolved_value: float, convolved reflectance value for the band
+    - convolved_value: float
+        Convolved reflectance value for the band.
     """
     # Define the range of wavelengths for the band
     half_width = (width // 2)
