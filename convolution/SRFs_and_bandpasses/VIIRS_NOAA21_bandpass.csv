@@ -1,5 +1,4 @@
 Band Number,Nominal Center Wavelength (int),Center Wavelength,Width (FWHM),Solar Irradiance,Rayleigh Optical Thickness,Depolarization Factor,k_oz (Ozone),k_no2 (NO2)
-, nm, nm, nm, W/m^2/um/sr,,,,
 1,411,411.051,19.448,1735.546,3.21E-01,2.95E-02,2.29E-04,6.04E-19
 2,445,444.895,16.883,1939.316,2.31E-01,2.91E-02,3.23E-03,4.92E-19
 3,489,488.363,20.035,1986.26,1.58E-01,2.87E-02,2.10E-02,2.92E-19

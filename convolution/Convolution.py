@@ -94,7 +94,7 @@ class Convolution:
         # Public variable not defined by the user but initiated by the user-defined sensor_name
         self.srf, self.bandpass = self.get_srf_and_bandpass()
         self.bandpass['Width (FWHM)'] = self.bandpass['Width (FWHM)'].apply(
-            lambda x: int(round(x)) | 1)  # Ensure widths are odd
+            lambda x: int(round(float(x))) | 1)  # Ensure widths are odd
 
         # Initialize the output DataFrame
         self.convolved_bands = pd.DataFrame(
