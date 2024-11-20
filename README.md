@@ -43,4 +43,5 @@ print(srf)
 print(bandpass)
 ```
 
-#### NOTE: Spectral Response Functions were donwloaded from here: https://oceancolor.gsfc.nasa.gov/resources/docs/rsr_tables/ 
+#### NOTE: Spectral Response Functions were donwloaded from here: https://oceancolor.gsfc.nasa.gov/resources/docs/rsr_tables/
+#### NOTE2: The Spectral Response Function for GOCI-II was obtained from here: https://www.nosc.go.kr/eng/boardContents/actionBoardContentsCons0024.do

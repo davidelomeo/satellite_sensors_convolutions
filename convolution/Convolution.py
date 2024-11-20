@@ -52,6 +52,7 @@ class Convolution:
             - 'VIIRS_NOAA20'    # Visible Infrared Imaging Radiometer Suite on NOAA 20
             - 'VIIRS_NOAA21'    # Visible Infrared Imaging Radiometer Suite on NOAA 21
             - 'GOCI'            # Geostationary Ocean Color Imager
+            - 'GOCI-II'         # Geostationary Ocean Color Imager II
 
         savefile : str, optional
             Path to save the output dataframe containing the convolved bands, if provided.
@@ -78,7 +79,8 @@ class Convolution:
             'MSI_S2A', 'MSI_S2B', 'OLCI_S3A', 'OLCI_S3B',
             'Superdove', 'TM_L5', 'ETM+_L7', 'OLI_L8',
             'OLI_L9', 'MERIS', 'MODIS_AQUA', 'MODIS_TERRA',
-            'VIIRS_SNPP', 'VIIRS_NOAA20', 'VIIRS_NOAA21', 'GOCI'
+            'VIIRS_SNPP', 'VIIRS_NOAA20', 'VIIRS_NOAA21',
+            'GOCI', 'GOCI-II'
         ]
 
         # Raising a Value Error if the input sensor name doesn't match the names defined in the doc.
